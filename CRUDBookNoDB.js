@@ -25,8 +25,8 @@ let books = [
         id: 3,
         title: "Book 3",
         author: "Author 3",
-    }
-]
+    },
+];
 
 // route to get all books
 app.get("/books", (req, res) => {
@@ -35,13 +35,9 @@ app.get("/books", (req, res) => {
 
 // route to get book by id
 app.get("/books/:id", (req, res) => {
-    const id = req.params.id;
-    const book = books.find(book => book.id == id);
-    if (book) {
-        res.json(book);
-    } else {
-        res.status(404).send({ message: "Book not found" });
-    }
+    const book = books.find(b => b.id === parseInt(req.params.id));
+    if (!book) res.status(404).send("Book not found");
+    res.send(book);
 });
 
 // route to create new book
@@ -57,8 +53,8 @@ app.post("/books", (req, res) => {
 
 // route to update book by id
 app.put("/books/:id", (req, res) => {
-    const book = books.find(b => b.id === prase.int(req.params.id));
-    if (!book) res.status(404).send({ message: "Book not found" });
+    const book = books.find(b => b.id === parseInt(req.params.id));
+    if (!book) res.status(404).send("Book not found");
     book.title = req.body.title;
     book.author = req.body.author;
     res.send(book);
@@ -67,7 +63,7 @@ app.put("/books/:id", (req, res) => {
 // route to delete book by id
 app.delete("/books/:id", (req, res) => {
     const book = books.find(b => b.id === parseInt(req.params.id));
-    if (!book) res.status(404).send({ message: "Book not found" });
+    if (!book) res.status(404).send("Book not found");
     const index = books.indexOf(book);
     books.splice(index, 1);
     res.send(book);
