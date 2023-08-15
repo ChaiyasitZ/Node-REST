@@ -9,7 +9,7 @@ const app = express(); // Make express app
 // parse requests of content-type - application/json
 app.use(express.json());
 
-// sample data
+// sample data array for books
 let books = [
     {
         id: 1,
