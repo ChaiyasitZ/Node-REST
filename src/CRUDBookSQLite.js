@@ -13,7 +13,7 @@ db.run(`CREATE TABLE IF NOT EXISTS Book (
     author TEXT
 )`);
 
-app.get('/book', (req, res) => {
+app.get('/books', (req, res) => {
     db.all('SELECT * FROM Book', (err, row) => {
         if (err) {
             res.Status(500).send(err);
@@ -27,7 +27,7 @@ app.get('/book', (req, res) => {
     });
 });
 
-app.post('/book', (req, res) => {
+app.post('/books', (req, res) => {
     const book = req.body;
     db.run(`INSERT INTO Book (title, author) VALUES (?, ?)`, [book.title, book.author], (err) => {
         if (err) {
@@ -39,7 +39,7 @@ app.post('/book', (req, res) => {
     });
 });
 
-app.put('/book/:id', (req, res) => {
+app.put('/books/:id', (req, res) => {
     const book = req.body;
     db.run(`UPDATE Book SET title = ?, author = ? WHERE id = ?`, [book.title, book.author, req.params.id], (err) => {
         if (err) {
@@ -50,7 +50,7 @@ app.put('/book/:id', (req, res) => {
     });
 });
 
-app.delete('/book/:id', (req, res) => {
+app.delete('/books/:id', (req, res) => {
     db.run(`DELETE FROM Book WHERE id = ?`, [req.params.id], (err) => {
         if (err) {
             res.status(500).send(err);
