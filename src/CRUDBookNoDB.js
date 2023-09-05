@@ -1,15 +1,9 @@
-// description: CRUD operations for books without a database
-// npm install express
-// Run this file using node CRUDBookNoDB.js
-// Test with Postman
-require("dotenv").config(); // Load .env file
-const express = require("express"); // Import express
-const app = express(); // Make express app
+require("dotenv").config(); 
+const express = require("express"); 
+const app = express(); 
 
-// parse requests of content-type - application/json
 app.use(express.json());
 
-// sample data array for books
 let books = [
     {
         id: 1,
@@ -28,19 +22,16 @@ let books = [
     },
 ];
 
-// route to get all books
 app.get("/books", (req, res) => {
     res.json(books);
 });
 
-// route to get book by id
 app.get("/books/:id", (req, res) => {
     const book = books.find(b => b.id === parseInt(req.params.id));
     if (!book) res.status(404).send("Book not found");
     res.send(book);
 });
 
-// route to create new book
 app.post("/books", (req, res) => {
     const book = {
         id: books.length + 1,
@@ -51,7 +42,6 @@ app.post("/books", (req, res) => {
     res.send(book);
 });
 
-// route to update book by id
 app.put("/books/:id", (req, res) => {
     const book = books.find(b => b.id === parseInt(req.params.id));
     if (!book) res.status(404).send("Book not found");
@@ -60,7 +50,6 @@ app.put("/books/:id", (req, res) => {
     res.send(book);
 });
 
-// route to delete book by id
 app.delete("/books/:id", (req, res) => {
     const book = books.find(b => b.id === parseInt(req.params.id));
     if (!book) res.status(404).send("Book not found");
@@ -69,9 +58,6 @@ app.delete("/books/:id", (req, res) => {
     res.send(book);
 });
 
-// Make server listen on some port
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}...`));
 
-// Test with Postman
-// GET http://localhost:3000/books

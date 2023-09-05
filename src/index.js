@@ -1,13 +1,11 @@
-require("dotenv").config(); // Load .env file
+require("dotenv").config(); 
 
-const express = require("express"); // Import express
-const app = express(); // Make express app
-const port = process.env.PORT || 5000; // Port from environment variable
+const express = require("express"); 
+const app = express(); 
+const port = process.env.PORT || 3000; 
  
-app.get("/", (req, res) => { // When user hit root directory
-  res.send("Hello World! Hello World! Hello World!"); // Send "Hello World!" to user
-});
+app.get("/", (req, res) => { 
+  res.send("Hello World!"); });
 
-app.listen(port, () => { // Make server listen on some port
-  console.log(`Example app listening at http://localhost:${port}`);
-});
+app.listen(port, () => { 
+  console.log(`Example app listening at http://localhost:${port}`);});
