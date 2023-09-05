@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const sqlite3 = require('sqlite3');
 const app = express();
@@ -9,7 +10,7 @@ app.use(express.json());
 db.run(`CREATE TABLE IF NOT EXISTS Book (
     id INTEGER PRIMARY KEY, 
     title TEXT,
-    author TEXT,   
+    author TEXT
 )`);
 
 app.get('/book', (req, res) => {
@@ -59,5 +60,5 @@ app.delete('/book/:id', (req, res) => {
     });
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
