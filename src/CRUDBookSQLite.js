@@ -60,10 +60,7 @@ app.put('/books/:id', (req, res) => {
     db.run(`UPDATE Book SET title = ?, author = ? WHERE id = ?`, book.title, book.author, req.params.id, function(err) {
         if (err) {
             res.status(500).send(err);
-        }
-        else if (!this.changes) {
-            res.status(404).send('Book Not Found'); 
-        }
+        } 
         else {
             res.send(book);
         }
@@ -74,7 +71,11 @@ app.delete('/books/:id', (req, res) => {
     db.run(`DELETE FROM Book WHERE id = ?`, req.params.id, function(err) {
         if (err) {
             res.status(500).send(err);
-        } else {
+        } 
+        else if (this.changes === 0) {
+            res.status(404).send('Book Not Found');
+        }
+        else {
             res.send('Book is deleted');
         }
     });
