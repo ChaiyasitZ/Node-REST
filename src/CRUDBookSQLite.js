@@ -37,6 +37,11 @@ app.get('/books/:id', (req, res) => {
     });
 });
 
+// add module createdAt and updatedAt
+
+
+
+
 app.post('/books', (req, res) => {
     const book = req.body;
     db.run(`INSERT INTO Book (title, author) VALUES (?, ?)`, book.title, book.author, function(err) {
@@ -64,11 +69,15 @@ app.delete('/books/:id', (req, res) => {
     db.run(`DELETE FROM Book WHERE id = ?`, req.params.id, function(err) {
         if (err) {
             res.status(500).send(err);
+        } if (!row) {
+            res.status(404).send('Book Not Found');
         } else {
             res.send('Book is deleted');
         }
     });
 });
+
+
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
