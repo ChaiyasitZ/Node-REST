@@ -37,12 +37,6 @@ app.get('/books/:id', (req, res) => {
     });
 });
 
-// add module createdAt and updatedAt
-app.get('/books/:id', (req, res) => {
-
-
-
-
 app.post('/books', (req, res) => {
     const book = req.body;
     db.run(`INSERT INTO Book (title, author) VALUES (?, ?)`, book.title, book.author, function(err) {
@@ -60,8 +54,7 @@ app.put('/books/:id', (req, res) => {
     db.run(`UPDATE Book SET title = ?, author = ? WHERE id = ?`, book.title, book.author, req.params.id, function(err) {
         if (err) {
             res.status(500).send(err);
-        } 
-        else {
+        } else {
             res.send(book);
         }
     });
@@ -71,10 +64,10 @@ app.delete('/books/:id', (req, res) => {
     db.run(`DELETE FROM Book WHERE id = ?`, req.params.id, function(err) {
         if (err) {
             res.status(500).send(err);
-        } 
+        }
         else if (this.changes === 0) {
             res.status(404).send('Book Not Found');
-        }
+        } 
         else {
             res.send('Book is deleted');
         }
