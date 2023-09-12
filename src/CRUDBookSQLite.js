@@ -18,10 +18,20 @@ app.get('/books', (req, res) => {
         if (err) {
             res.Status(500).send(err);
         } else {
+            res.json(row);
+        }
+    });
+});
+
+app.get('/books/:id', (req, res) => {
+    db.get('SELECT * FROM Book WHERE id = ?', req.params.id, (err, row) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
             if (!row) {
-                res.Status(404).send('Book Not Found');
+                res.status(404).send('Book Not Found');
             } else {
-                res.send(row);
+                res.json(row);
             }
         }
     });
@@ -29,7 +39,7 @@ app.get('/books', (req, res) => {
 
 app.post('/books', (req, res) => {
     const book = req.body;
-    db.run(`INSERT INTO Book (title, author) VALUES (?, ?)`, [book.title, book.author], (err) => {
+    db.run(`INSERT INTO Book (title, author) VALUES (?, ?)`, book.title, book.author, function(err) {
         if (err) {
             res.status(500).send(err);
         } else {
@@ -41,7 +51,7 @@ app.post('/books', (req, res) => {
 
 app.put('/books/:id', (req, res) => {
     const book = req.body;
-    db.run(`UPDATE Book SET title = ?, author = ? WHERE id = ?`, [book.title, book.author, req.params.id], (err) => {
+    db.run(`UPDATE Book SET title = ?, author = ? WHERE id = ?`, book.title, book.author, req.params.id, function(err) {
         if (err) {
             res.status(500).send(err);
         } else {
@@ -51,7 +61,7 @@ app.put('/books/:id', (req, res) => {
 });
 
 app.delete('/books/:id', (req, res) => {
-    db.run(`DELETE FROM Book WHERE id = ?`, [req.params.id], (err) => {
+    db.run(`DELETE FROM Book WHERE id = ?`, req.params.id, function(err) {
         if (err) {
             res.status(500).send(err);
         } else {
