@@ -10,10 +10,9 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     storage: './Database/SQBooks.sqlite'
 });
 
-
-const Book = sequelize.define('Book', {
+const Book = sequelize.define('book', {
     id: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
 },
