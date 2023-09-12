@@ -40,11 +40,12 @@ app.get('/books/:id', (req, res) => {
     Book.findByPk(req.params.id).then(book => {
         if (!book) {
             res.status(404).send('Book Not Found');
+        } else {    
+            res.json(book);
         }
-        res.json(book);
     }).catch(err => {
         res.status(500).send(err);
-    }); 
+    });
 });
 
 app.post('/books', (req, res) => {
@@ -60,7 +61,7 @@ app.put('/books/:id', (req, res) => {
         if (!book) {
             res.status(404).send('Book Not Found');
         } else {
-            book.update(req.body).then(book => {
+            book.update(req.body).then(() => {
                 res.send(book);
             }).catch(err => {
                 res.status(500).send(err);
@@ -77,7 +78,7 @@ app.delete('/books/:id', (req, res) => {
             res.status(404).send('Book Not Found');
         } else {
             book.destroy().then(() => {
-                res.send(book);
+                res.send({});
             }).catch(err => {
                 res.status(500).send(err);
             });
