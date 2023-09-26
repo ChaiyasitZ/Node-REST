@@ -15,15 +15,15 @@ const Book = sequelize.define('book', {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
-},
+    },
     title: {
         type: Sequelize.STRING,
         allowNull: false
-},
-    author:{
+    },
+    author: {
         type: Sequelize.STRING,
         allowNull: false
-}
+    }
 });
 
 sequelize.sync();
@@ -39,8 +39,8 @@ app.get('/books', (req, res) => {
 app.get('/books/:id', (req, res) => {
     Book.findByPk(req.params.id).then(book => {
         if (!book) {
-            res.status(404).send('Book Not Found');
-        } else {    
+            res.status(404).send('Book not found');
+        } else {
             res.json(book);
         }
     }).catch(err => {
@@ -59,7 +59,7 @@ app.post('/books', (req, res) => {
 app.put('/books/:id', (req, res) => {
     Book.findByPk(req.params.id).then(book => {
         if (!book) {
-            res.status(404).send('Book Not Found');
+            res.status(404).send('Book not found');
         } else {
             book.update(req.body).then(() => {
                 res.send(book);
@@ -75,13 +75,13 @@ app.put('/books/:id', (req, res) => {
 app.delete('/books/:id', (req, res) => {
     Book.findByPk(req.params.id).then(book => {
         if (!book) {
-            res.status(404).send('Book Not Found');
+            res.status(404).send('Book not found');
         } else {
             book.destroy().then(() => {
-                res.send('Book Has Been Deleted');
+                res.send({});
             }).catch(err => {
                 res.status(500).send(err);
-            });
+                });
         }
     }).catch(err => {
         res.status(500).send(err);
@@ -90,6 +90,3 @@ app.delete('/books/:id', (req, res) => {
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
-
-
-        
