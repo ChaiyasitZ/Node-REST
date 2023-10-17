@@ -1,72 +1,90 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-
-mongoose.connect(
-    'mongodb://admin:XFLatb62984@10.104.15.124:27017', 
-    { 
-        useNewUrlParser: true, 
-        useUnifiedTopology: true 
-    }
-);
-
-const Book = mongoose.model('Book', {
-    id: Number,
-    title: String,
-    author: String
-});
-
+const Sequelize = require('sequelize');
 const app = express();
 
-app.use(bodyParser.json());
+app.use(express.json());
 
-app.post('/books',async (req, res) => {
-    try {
-        const book = new Book(req.body);
-        book.id = (await Book.countDocuments()) + 1;
-        await book.save();
+const dbUrl = 'postgres://webadmin:YKKgle22587@10.104.15.125:5432/Books'
+
+const sequelize = new Sequelize(dbUrl);
+
+const Book = sequelize.define('book', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    title: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    author: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+});
+
+sequelize.sync();
+
+app.get('/books', (req, res) => {
+    Book.findAll().then(books => {
+        res.json(books);
+    }).catch(err => {
+        res.status(500).send(err);
+    });
+});
+
+app.get('/books/:id', (req, res) => {
+    Book.findByPk(req.params.id).then(book => {
+        if (!book) {
+            res.status(404).send('Book not found');
+        } else {
+            res.json(book);
+        }
+    }).catch(err => {
+        res.status(500).send(err);
+    });
+});
+
+app.post('/books', (req, res) => {
+    Book.create(req.body).then(book => {
         res.send(book);
-    } catch (err) {
+    }).catch(err => {
         res.status(500).send(err);
-    }
+    });
 });
 
-app.get('/books', async (req, res) => {
-    try {
-        const books = await Book.find();
-        res.send(books);
-    } catch (err) {
+app.put('/books/:id', (req, res) => {
+    Book.findByPk(req.params.id).then(book => {
+        if (!book) {
+            res.status(404).send('Book not found');
+        } else {
+            book.update(req.body).then(() => {
+                res.send(book);
+            }).catch(err => {
+                res.status(500).send(err);
+            });
+        }
+    }).catch(err => {
         res.status(500).send(err);
-    }
+    });
 });
 
-app.get('/books/:id', async (req, res) => {
-    try {
-        const book = await Book.findOne({ id: req.params.id });
-        res.send(book);
-    } catch (err) {
+app.delete('/books/:id', (req, res) => {
+    Book.findByPk(req.params.id).then(book => {
+        if (!book) {
+            res.status(404).send('Book not found');
+        } else {
+            book.destroy().then(() => {
+                res.send({});
+            }).catch(err => {
+                res.status(500).send(err);
+                });
+        }
+    }).catch(err => {
         res.status(500).send(err);
-    }
+    });
 });
 
-app.put('/books/:id', async (req, res) => {
-    try {
-        const book = await Book.findByIdAndUpdate(req.params.id, req.body, { 
-            new: true });
-        res.send(book);
-    } catch (err) {
-        res.status(500).send(err);
-    }
-});
-
-app.delete('/books/:id', async (req, res) => {
-    try {
-        const book = await Book.findByIdAndDelete(req.params.id);
-        res.send(book);
-    } catch (err) {
-        res.status(500).send(err);
-    }
-});
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on port http://localhost:${port}`));
+const port = process.env.PORT || 8080;
+app.listen(port, () => console.log(`run on http://localhost:${port}`));
